@@ -4,7 +4,7 @@ namespace Book\Form;
 
 use Zend\Form\Form;
 use Book\Entity\Book;
-
+use Book\Entity\Author;
 
 class BookForm extends Form
 {    
@@ -24,7 +24,6 @@ class BookForm extends Form
      */
     protected function addElements() 
     {
-
         $this->add([
             'name' => 'id',
             'type' => 'hidden',            
@@ -66,6 +65,20 @@ class BookForm extends Form
                 'label' => 'Author',
             ],
         ]);
+
+        // $this->add([
+        //     'type'  => 'select',
+        //     'name' => 'author_id',
+        //     'attributes' => [                
+        //         'id' => 'author_id'
+        //     ],
+        //     'options' => [
+        //         'label' => 'Author',
+        //         'value_options' => [
+        //             '' => '',
+        //         ]
+        //     ],
+        // ]);
 
         $this->add([
             'name' => 'category_id',

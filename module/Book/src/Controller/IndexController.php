@@ -5,6 +5,7 @@ namespace Book\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Book\Entity\Book;
+use Book\Entity\Author;
 use Book\Form\BookForm;
 
 class IndexController extends AbstractActionController
@@ -19,20 +20,19 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {        
         //$books = $this->entityManager->getRepository(Book::class)->findAll();
+        //$authors = $this->entityManager->getRepository(Author::class)->getAllAuthors();
+
+        // echo '<pre>',print_r($authors,1),'</pre>';
+        //print_r($books);
 
         $books = $this->entityManager->getRepository(Book::class)->getAllBooks();
-
-        //echo '<pre>',print_r($books,1),'</pre>';
-
-        print_r($books);
-
-        //return new ViewModel(['books' => $books]);
+        return new ViewModel(['books' => $books]);
     }
 
     public function addAction()
-    {
+    {   
         // Create the form.
-        $form = new BookForm;
+        $form = new BookForm();
     
         // Check whether this post is a POST request.
         if ($this->getRequest()->isPost()) {

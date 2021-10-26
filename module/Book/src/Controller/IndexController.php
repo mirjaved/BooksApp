@@ -18,13 +18,7 @@ class IndexController extends AbstractActionController
     }
     
     public function indexAction()
-    {        
-        //$books = $this->entityManager->getRepository(Book::class)->findAll();
-        //$authors = $this->entityManager->getRepository(Author::class)->getAllAuthors();
-
-        // echo '<pre>',print_r($authors,1),'</pre>';
-        //print_r($books);
-
+    {   
         $books = $this->entityManager->getRepository(Book::class)->getAllBooks();
         return new ViewModel(['books' => $books]);
     }

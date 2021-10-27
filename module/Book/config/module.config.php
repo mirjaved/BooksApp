@@ -2,16 +2,11 @@
 
 namespace Book;
 
-// use Zend\Router\Http\Literal;
-// use Zend\Router\Http\Segment;
-// use Zend\ServiceManager\Factory\InvokableFactory;
-// use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\Router\Http\Regex;
 use Zend\ServiceManager\Factory\InvokableFactory;
-use Application\Route\StaticRoute;
+use Book\Route\StaticRoute;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
@@ -22,7 +17,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\BookController::class,
                         'action'     => 'index',
                     ],
                 ],                
@@ -32,7 +27,7 @@ return [
                 'options' => [
                     'route'    => '/book[/:action[/:id]]',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\BookController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -41,10 +36,14 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            //Controller\IndexController::class => InvokableFactory::class,
-            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,            
+            Controller\BookController::class => Controller\Factory\BookControllerFactory::class,
         ],
     ],
+    'service_manager' => [
+        'factories' => [
+            Service\BookManager::class => Service\Factory\BookManagerFactory::class,
+        ],
+    ],    
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a single book in a Book.
- * @ORM\Entity(repositoryClass="\Book\Repository\BookRepository")
+ * @ORM\Entity(repositoryClass="\Book\Repository\CategoryRepository")
  * @ORM\Table(name="category")
  */
 class Category
@@ -22,6 +22,12 @@ class Category
      * @ORM\Column(name="category")
      */
     protected $category;
+
+    /**
+   * @ORM\ManyToOne(targetEntity="\Book\Entity\Book", inversedBy="category")
+   * @ORM\JoinColumn(name="id", referencedColumnName="id")
+   */
+  protected $book;
     
     /**
      * Returns ID of this category.

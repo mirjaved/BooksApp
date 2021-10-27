@@ -5,6 +5,9 @@ namespace Book\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Book\Entity\Author;
+use Book\Entity\Category;
+
 /**
  * This class represents a single book in a Book.
  * @ORM\Entity(repositoryClass="\Book\Repository\BookRepository")
@@ -25,7 +28,7 @@ class Book
     protected $title;
 
      /** 
-     * @ORM\Column(name="description")  
+     * @ORM\Column(name="description")
      */
     protected $description;
 
@@ -38,6 +41,27 @@ class Book
      * @ORM\Column(name="category_id")  
      */
     protected $category_id;
+   
+    /**
+     * @ORM\OneToMany(targetEntity="\Book\Entity\Author", mappedBy="book")
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
+     */
+    protected $authors;
+
+    /**
+   * @ORM\OneToMany(targetEntity="\Book\Entity\Category", mappedBy="book")
+   * @ORM\JoinColumn(name="id", referencedColumnName="id")
+   */
+    protected $categories;
+
+    /**
+     * Constructor.
+     */
+    public function __construct() 
+    {
+        $this->authors = new ArrayCollection();        
+        $this->categories = new ArrayCollection();        
+    }
 
 
     /**
@@ -91,7 +115,7 @@ class Book
     /**
      * Returns book author.
      */
-    public function getAuthor() {
+    public function getAuthorID() {
         return $this->author_id;
     }
 
@@ -99,14 +123,14 @@ class Book
      * Sets book author.
      * @param type $author_id
      */
-    public function setAuthor($author_id) {
+    public function setAuthorID($author_id) {
         $this->author_id = $author_id;
     }
 
     /**
      * Returns book category.
      */
-    public function getCategory() {
+    public function getCategoryId() {
         return $this->category_id;
     }
 
@@ -114,8 +138,45 @@ class Book
      * Sets book category.
      * @param type $category_id
      */
-    public function setCategory($category_id) {
+    public function setCategoryId($category_id) {
         $this->category_id = $category_id;
+    }
+
+
+    /**
+     * Returns comments for this post.
+     * @return array
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
+
+    /**
+     * Adds a new comment to this post.
+     * @param $comment
+     */
+    public function addAuthors($authors) 
+    {
+        $this->authors = $authors;
+    }
+
+    /**
+     * Returns categories.
+     * @return array
+     */
+    public function getCategories() 
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Adds categories to this book.
+     * @param $categories
+     */
+    public function addCategories($categories) 
+    {
+        $this->categories[] = $categories;
     }
 }
 

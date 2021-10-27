@@ -5,8 +5,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * This class represents a single book in a Book.
- * @ORM\Entity(repositoryClass="\Book\Repository\BookRepository")
+ * This class represents a single author in a Book.
+ * @ORM\Entity(repositoryClass="\Book\Repository\AuthorRepository")
  * @ORM\Table(name="author")
  */
 class Author
@@ -22,7 +22,13 @@ class Author
     /** 
      * @ORM\Column(name="author")
      */
-    protected $author;    
+    protected $author;
+
+    /**
+   * @ORM\ManyToOne(targetEntity="\Book\Entity\Book", inversedBy="author")
+   * @ORM\JoinColumn(name="id", referencedColumnName="id")
+   */
+    protected $book;
         
     /**
      * Returns ID of this author.

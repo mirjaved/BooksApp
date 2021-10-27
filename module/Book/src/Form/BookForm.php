@@ -3,12 +3,10 @@
 namespace Book\Form;
 
 use Zend\Form\Form;
-use Book\Entity\Book;
-use Book\Entity\Author;
 
 class BookForm extends Form
-{    
-    public function __construct()
+{   
+    public function __construct($allAuthors)
     {
         // Define form name
         parent::__construct('bookForm');
@@ -17,8 +15,13 @@ class BookForm extends Form
         $this->setAttribute('method', 'POST');
 
         $this->addElements();
+
+        foreach($allAuthors as $author)
+        {
+            $Authors[$author->getId()] = $author->getAuthor();
+        }        
     }
-    
+        
     /**
      * This method adds elements to form (input fields and submit button).
      */
@@ -26,7 +29,7 @@ class BookForm extends Form
     {
         $this->add([
             'name' => 'id',
-            'type' => 'hidden',            
+            'type' => 'hidden',
         ]);
 
         $this->add([
@@ -55,30 +58,28 @@ class BookForm extends Form
             ],
         ]);
 
+        // $this->add([
+        //     'name' => 'author_id',
+        //     'type' => 'Text',
+        //     'attributes' => [
+        //         'id' => 'author_id'
+        //     ],
+        //     'options' => [
+        //         'label' => 'Author',
+        //     ],
+        // ]);
+
         $this->add([
+            'type'  => 'select',
             'name' => 'author_id',
-            'type' => 'Text',
             'attributes' => [
                 'id' => 'author_id'
             ],
             'options' => [
                 'label' => 'Author',
+                'value_options' => [],
             ],
         ]);
-
-        // $this->add([
-        //     'type'  => 'select',
-        //     'name' => 'author_id',
-        //     'attributes' => [                
-        //         'id' => 'author_id'
-        //     ],
-        //     'options' => [
-        //         'label' => 'Author',
-        //         'value_options' => [
-        //             '' => '',
-        //         ]
-        //     ],
-        // ]);
 
         $this->add([
             'name' => 'category_id',

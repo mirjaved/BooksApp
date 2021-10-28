@@ -5,8 +5,10 @@ namespace Book\Form;
 use Zend\Form\Form;
 
 class BookForm extends Form
-{   
-    public function __construct($allAuthors)
+{
+    private $authors = [];
+
+    public function __construct()
     {
         // Define form name
         parent::__construct('bookForm');
@@ -14,13 +16,13 @@ class BookForm extends Form
         // Set POST method for this form
         $this->setAttribute('method', 'POST');
 
-        $this->addElements();
-
-        foreach($allAuthors as $author)
-        {
-            $Authors[$author->getId()] = $author->getAuthor();
-        }        
+        $this->addElements();        
     }
+
+
+    public function setAuthors(array $authors) {
+        $this->authors = $authors;
+   }
         
     /**
      * This method adds elements to form (input fields and submit button).
@@ -77,7 +79,7 @@ class BookForm extends Form
             ],
             'options' => [
                 'label' => 'Author',
-                'value_options' => [],
+                'value_options' => $this->authors,
             ],
         ]);
 

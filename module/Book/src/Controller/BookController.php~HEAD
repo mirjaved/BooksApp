@@ -35,8 +35,13 @@ class BookController extends AbstractActionController
     }
     
     public function indexAction()
+<<<<<<< HEAD:module/Book/src/Controller/BookController.php
     {
+        $books = $this->entityManager->getRepository(Book::class)->getAllBooks();        
+=======
+    {   
         $books = $this->entityManager->getRepository(Book::class)->getAllBooks();
+>>>>>>> 37f53312bbe7d34fea9e1ca6cafed08637fd4e4b:module/Book/src/Controller/IndexController.php
         return new ViewModel(['books' => $books]);
     }
 
@@ -47,8 +52,10 @@ class BookController extends AbstractActionController
      */
     public function addAction()
     {
+        $allAuthors = $this->entityManager->getRepository(Author::class)->getAllAuthors();
+
         // Create the form.
-        $form = new BookForm();
+        $form = new BookForm($allAuthors);
     
         // Check whether this post is a POST request.
         if ($this->getRequest()->isPost()) {

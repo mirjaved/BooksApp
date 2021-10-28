@@ -4,12 +4,10 @@ namespace Book\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Book\Entity\Book;
 use Book\Form\BookForm;
-
+use Book\Entity\Book;
 use Book\Entity\Author;
-
-use Zend\Form\FormElementManager;
+use Book\Entity\Category;
 
 class BookController extends AbstractActionController
 {
@@ -20,7 +18,7 @@ class BookController extends AbstractActionController
     private $entityManager;
     
     /**
-     * Post manager.
+     * Book manager.
      * @var Book\Service\BookManager 
      */
     private $bookManager;
@@ -28,10 +26,10 @@ class BookController extends AbstractActionController
     /**
      * Constructor is used for injecting dependencies into the controller.
      */
-    public function __construct($entityManager, $bookManager) 
+    public function __construct($entityManager, $bookManager)
     {
         $this->entityManager = $entityManager;
-        $this->bookManager = $bookManager;
+        $this->bookManager = $bookManager;        
     }
     
     public function indexAction()
@@ -40,6 +38,32 @@ class BookController extends AbstractActionController
         return new ViewModel(['books' => $books]);
     }
 
+     /**
+     * This function return all the Authors from database.
+     */
+    public function selectAuthors()
+    {
+        $authors = $this->entityManager->getRepository(Author::class)->getAllAuthors();
+        foreach($authors as $author)
+        {
+            $allAuthors[$author->getId()] = $author->getAuthor();
+        }
+        return $allAuthors;
+    }
+
+    /**
+     * This function return all the Categories from database.
+     */
+    public function selectCategories()
+    {
+        $categories = $this->entityManager->getRepository(Category::class)->getAllCategories();
+        foreach($categories as $category)
+        {
+            $allCategories[$category->getId()] = $category->getCategory();
+        }
+        return $allCategories;
+    }   
+
     /**
      * This action displays the "New Book" page. The page contains a form allowing
      * to enter several fields. When the user clicks the Submit button,
@@ -47,8 +71,11 @@ class BookController extends AbstractActionController
      */
     public function addAction()
     {
+        $allAuthors    = $this->selectAuthors();
+        $allCategories = $this->selectCategories();
+
         // Create the form.
-        $form = new BookForm();
+        $form = new BookForm($allAuthors, $allCategories);
     
         // Check whether this post is a POST request.
         if ($this->getRequest()->isPost()) {
@@ -81,8 +108,11 @@ class BookController extends AbstractActionController
      */
     public function editAction()
     {
+        $allAuthors    = $this->selectAuthors();
+        $allCategories = $this->selectCategories();
+
         // Create form.
-        $form = new BookForm();
+        $form = new BookForm($allAuthors, $allCategories);
         
         // Get book ID.
         $bookId = (int)$this->params()->fromRoute('id', -1);
@@ -152,15 +182,26 @@ class BookController extends AbstractActionController
         }
         
         $book = $this->entityManager->getRepository(Book::class)
-                ->findOneById($bookId);        
+                ->findOneById($bookId);
         if ($book == null) {
             $this->getResponse()->setStatusCode(404);
             return;                        
         }
-        
-        $this->bookManager->removeBook($book);
-        
-        // Redirect the user to "admin" page.
-        return $this->redirect()->toRoute('home'); 
+
+        $request = $this->getRequest();
+        if (!$request->isPost()) {            
+            return new ViewModel([
+                'id' => $bookId,
+                'book' => $book,
+            ]);
+        }
+
+        $delete = $request->getPost('delete', 'No');
+        if($delete == 'Yes') {            
+            $this->bookManager->removeBook($book);
+            return $this->redirect()->toRoute('home');
+        } else {
+            return $this->redirect()->toRoute('home');    
+        }
     }
 }

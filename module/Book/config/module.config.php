@@ -41,7 +41,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            Service\BookManager::class => Service\Factory\BookManagerFactory::class,
+            Service\BookManager::class => Service\Factory\BookManagerFactory::class,            
         ],
     ],    
     'view_manager' => [

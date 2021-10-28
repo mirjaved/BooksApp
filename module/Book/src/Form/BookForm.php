@@ -6,9 +6,7 @@ use Zend\Form\Form;
 
 class BookForm extends Form
 {
-    private $authors = [];
-
-    public function __construct()
+    public function __construct($allAuthors, $allCategories)
     {
         // Define form name
         parent::__construct('bookForm');
@@ -16,19 +14,6 @@ class BookForm extends Form
         // Set POST method for this form
         $this->setAttribute('method', 'POST');
 
-        $this->addElements();        
-    }
-
-
-    public function setAuthors(array $authors) {
-        $this->authors = $authors;
-   }
-        
-    /**
-     * This method adds elements to form (input fields and submit button).
-     */
-    protected function addElements() 
-    {
         $this->add([
             'name' => 'id',
             'type' => 'hidden',
@@ -60,17 +45,6 @@ class BookForm extends Form
             ],
         ]);
 
-        // $this->add([
-        //     'name' => 'author_id',
-        //     'type' => 'Text',
-        //     'attributes' => [
-        //         'id' => 'author_id'
-        //     ],
-        //     'options' => [
-        //         'label' => 'Author',
-        //     ],
-        // ]);
-
         $this->add([
             'type'  => 'select',
             'name' => 'author_id',
@@ -79,18 +53,19 @@ class BookForm extends Form
             ],
             'options' => [
                 'label' => 'Author',
-                'value_options' => $this->authors,
+                'value_options' => $allAuthors,
             ],
         ]);
 
         $this->add([
+            'type'  => 'select',
             'name' => 'category_id',
-            'type' => 'Text',
             'attributes' => [
                 'id' => 'category_id'
             ],
             'options' => [
                 'label' => 'Category',
+                'value_options' => $allCategories,
             ],
         ]);
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Book\Service;
 
 use Zend\ServiceManager\ServiceManager;
@@ -35,7 +36,7 @@ class BookManager
         $book->setTitle($data['title']);
         $book->setDescription($data['description']);
         $book->setAuthorId($data['author_id']);
-        $book->setCategoryId($data['category_id']);   
+        $book->setCategoryId($data['category_id']);
         
         // Add the entity to entity manager.
         $this->entityManager->persist($book);
